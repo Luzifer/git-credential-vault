@@ -7,6 +7,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+var errNoData = errors.New("Found no data")
+
 func getCredentialSetFromVault(host string) (map[string]string, error) {
 	client, err := api.NewClient(nil)
 	if err != nil {
@@ -19,7 +21,7 @@ func getCredentialSetFromVault(host string) (map[string]string, error) {
 	}
 
 	if secret == nil || secret.Data == nil {
-		return nil, errors.New("Found no data")
+		return nil, errNoData
 	}
 
 	var out = map[string]string{}

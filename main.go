@@ -86,8 +86,18 @@ func handleGetAction() {
 	}
 
 	vaultValues, err := getCredentialSetFromVault(values["host"])
-	if err != nil {
+	switch err {
+
+	case nil:
+		// Fine
+
+	case errNoData:
+		// Return empty, git will handle the rest
+		return
+
+	default:
 		log.WithError(err).Fatal("Unable to retrieve values from Vault")
+
 	}
 
 	for k, v := range vaultValues {
