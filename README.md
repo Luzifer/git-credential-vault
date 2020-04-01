@@ -33,3 +33,26 @@ username=api
 password=myverysecrettoken
 protocol=https
 ```
+
+### Dockerfile example (go get)
+
+In this example the `VAULT_TOKEN` is passed in through a build-arg which means you **MUST** revoke the token before pushing the image, otherwise you will be leaking an active credential!
+
+```Dockerfile
+FROM golang:alpine
+
+ARG VAULT_ADDR
+ARG VAULT_TOKEN
+
+RUN set -ex \
+ && apk --no-cache add git \
+ && go get -u -v github.com/Luzifer/git-credential-vault \
+ && git config --global credential.helper 'vault --vault-path-prefix secret/git-credentials'
+
+RUN set -ex \
+ && go get -v github.com/myuser/secretrepo
+```
+
+```console
+# docker build --build-arg VAULT_ADDR=${VAULT_ADDR} --build-arg VAULT_TOKEN=${VAULT_TOKEN} --no-cache .
+```
