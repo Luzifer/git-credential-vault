@@ -13,7 +13,7 @@ The only supported action is `get` as storage is managed through Vault related t
 ## Expected Vault structure
 
 ```
-secret/git-credentials
+secret/git-credentials (pass this to --vault-path-prefix)
  +- github.com
  |   +- username = api
  |   +- password = verysecrettoken
