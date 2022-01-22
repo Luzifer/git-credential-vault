@@ -55,6 +55,7 @@ func main() {
 	initApp()
 
 	var action string
+	//nolint:gomnd // Just a count of cli arguments, no need to make a constant
 	if len(rconfig.Args()) == 2 {
 		action = rconfig.Args()[1]
 	}
@@ -114,7 +115,7 @@ func readInput(input io.Reader) (map[string]string, error) {
 	)
 
 	for scanner.Scan() {
-		var text = strings.TrimSpace(scanner.Text())
+		text := strings.TrimSpace(scanner.Text())
 
 		if text == "" {
 			break
