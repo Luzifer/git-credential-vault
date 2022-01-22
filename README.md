@@ -82,7 +82,7 @@ RUN set -ex \
 # docker build --build-arg VAULT_ADDR=${VAULT_ADDR} --build-arg VAULT_TOKEN=${VAULT_TOKEN} --no-cache .
 ```
 
-### Dockerfile example (go get)
+### Dockerfile example (go install)
 
 In this example the `VAULT_TOKEN` is passed in through a build-arg which means you **MUST** revoke the token before pushing the image, otherwise you will be leaking an active credential!
 
@@ -94,7 +94,7 @@ ARG VAULT_TOKEN
 
 RUN set -ex \
  && apk --no-cache add git \
- && go get -u -v github.com/Luzifer/git-credential-vault \
+ && go install github.com/Luzifer/git-credential-vault@latest \
  && git config --global credential.helper 'vault --vault-path-prefix secret/git-credentials'
 
 RUN set -ex \
