@@ -34,6 +34,30 @@ password=myverysecrettoken
 protocol=https
 ```
 
+### Vault KV Secrets Engine - Version 2
+
+This tool supports both versions of the Vault KV Secrets Engine. You just need to consider one thing: Version 2 of the KV Secrets Engine does use slightly modified paths for reading secrets. In order to be compatible to both versions of the Secrets Engine you need to adjust the `vault-path-prefix` slightly when using it:
+
+```bash
+# Version 1
+vault list secret_v1/git-credentials
+# Keys
+# ----
+# github.com
+git config --global credential.helper 'vault --vault-path-prefix secret_v1/git-credentials'
+```
+
+```bash
+# Version 2
+vault kv list secret_v2/git-credentials
+# Keys
+# ----
+# github.com
+git config --global credential.helper 'vault --vault-path-prefix secret_v2/data/git-credentials'
+```
+
+Mind the extra `/data` after the mountpoint for a mountpoint using version 2. If you omit it the tool will not work properly as it will not yield any credentials.
+
 ### Dockerfile example (git clone)
 
 In this example the `VAULT_TOKEN` is passed in through a build-arg which means you **MUST** revoke the token before pushing the image, otherwise you will be leaking an active credential!
